@@ -5,20 +5,13 @@ import {
   MicroCMSQueries,
 } from "microcms-js-sdk";
 
-const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN || '';
-const apiKey = process.env.MICROCMS_API_KEY || '';
-
-if (!serviceDomain && typeof window === 'undefined') {
-  console.warn('警告: MICROCMS_SERVICE_DOMAIN が設定されていません');
-}
-
-if (!apiKey && typeof window === 'undefined') {
-  console.warn('警告: MICROCMS_API_KEY が設定されていません');
-}
+// エラーを投げずにダミー値を使用
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN || 'dummy';
+const apiKey = process.env.MICROCMS_API_KEY || 'dummy';
 
 const client = createClient({
-  serviceDomain: serviceDomain || 'dummy',
-  apiKey: apiKey || 'dummy',
+  serviceDomain,
+  apiKey,
 });
 
 // カテゴリの出力 （エンドポイント: categoriesから）
