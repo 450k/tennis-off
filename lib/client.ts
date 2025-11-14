@@ -1,109 +1,109 @@
 import {
   createClient,
-  MicroCMSDate,
-  MicroCMSImage,
   MicroCMSQueries,
 } from "microcms-js-sdk";
 
-// エラーを投げずにダミー値を使用
 const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN || 'dummy';
 const apiKey = process.env.MICROCMS_API_KEY || 'dummy';
+
+// デバッグ用ログ
+if (typeof window === 'undefined') {
+  console.log('========== microCMS設定 ==========');
+  console.log('Service Domain:', serviceDomain);
+  console.log('API Key length:', apiKey.length);
+  console.log('API Key starts with:', apiKey.substring(0, 8) + '...');
+  console.log('API Key ends with:', '...' + apiKey.substring(apiKey.length - 8));
+  console.log('Is dummy?:', apiKey === 'dummy');
+  console.log('==================================');
+}
 
 const client = createClient({
   serviceDomain,
   apiKey,
 });
 
-// カテゴリの出力 （エンドポイント: categoriesから）
+// 型定義は省略（そのまま）
 export type Category = {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
   name: string;
 };
 
-// Blog記事のエクスポート(エンドポイント: astro)
 export type Blog = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-  revisedAt: string
-  title: string
-  content: string
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
+  title: string;
+  content: string;
   thumbnail: {
-    url: string,
-    height: number,
-    width: number,
-    alt: string
-  }
-}
+    url: string;
+    height: number;
+    width: number;
+    alt: string;
+  };
+};
 
-
-export type Event = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-  revisedAt: string
-  eventTitle: string
+export type EventList = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
+  eventTitle: string;
   eventCategory: Category;
-  eventDate:string
-  eventStartTime:string
-  eventHour:string
-  eventPlace:string
-  eventMember:string
-  eventCourtNum:string
-  eventCourtSurface:string
-  eventPrice:number
-  eventContent:string
-}
+  eventDate: string;
+  eventStartTime: string;
+  eventHour: string;
+  eventPlace: string;
+  eventMember: string;
+  eventCourtNum: string;
+  eventCourtSurface: string;
+  eventPrice: number;
+  eventContent: string;
+};
 
-
-// カテゴリの書き出し　ここはcategoriesのエンドポイントから書き出している
-export async function getCategories() {
+export async function getCategories(queries?: MicroCMSQueries) {
   const categories = await client.getList<Category>({
-    endpoint: "categories",
+    endpoint: "event",
+    ...(queries && { queries }),
   });
-
   return categories;
 }
 
-// blog記事　全体の書き出し
+export async function getEvents(queries?: MicroCMSQueries) {
+  const events = await client.getList<EventList>({
+    endpoint: "event",
+    ...(queries && { queries }),
+  });
+  return events;
+}
+
+export async function getEvent(contentId: string) {
+  const event = await client.getListDetail<EventList>({
+    endpoint: "event",
+    contentId,
+  });
+  return event;
+}
+
 export async function getBlogs(queries?: MicroCMSQueries) {
+  const mergedQueries = queries ? { limit: 10, ...queries } : { limit: 10 };
   const blogs = await client.getList<Blog>({
     endpoint: "astro",
-    queries: {
-      limit: 10,
-    }
+    queries: mergedQueries,
   });
-
   return blogs;
 }
 
-// blog記事単体の書き出し
 export async function getBlog(contentId: string) {
   const blog = await client.getListDetail<Blog>({
     endpoint: "astro",
     contentId,
   });
-
   return blog;
-}
-
-// イベントの一覧の書き出し　ここはeventエンドポイントから書き出しているので注意
-export async function getEvents(queries?:MicroCMSQueries ) {
-  const events = await client.getList<Event>({
-    endpoint: "event",
-  });
-
-  return events;
-}
-
-// event単体の書き出し
-export async function getEvent(contentId: string) {
-  const event = await client.getListDetail<Event>({
-    endpoint: "event",
-    contentId,
-  });
-
-  return event;
 }
