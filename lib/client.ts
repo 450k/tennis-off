@@ -5,17 +5,20 @@ import {
   MicroCMSQueries,
 } from "microcms-js-sdk";
 
-// if (!process.env.MICROCMS_SERVICE_DOMAIN) {
-//   throw new Error("サービスドメインが必要です");
-// }
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN || '';
+const apiKey = process.env.MICROCMS_API_KEY || '';
 
-// if (!process.env.MICROCMS_API_KEY) {
-//   throw new Error("APIキーが必要です");
-// }
+if (!serviceDomain && typeof window === 'undefined') {
+  console.warn('警告: MICROCMS_SERVICE_DOMAIN が設定されていません');
+}
+
+if (!apiKey && typeof window === 'undefined') {
+  console.warn('警告: MICROCMS_API_KEY が設定されていません');
+}
 
 const client = createClient({
-  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
-  apiKey: process.env.MICROCMS_API_KEY,
+  serviceDomain: serviceDomain || 'dummy',
+  apiKey: apiKey || 'dummy',
 });
 
 // カテゴリの出力 （エンドポイント: categoriesから）
