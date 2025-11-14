@@ -13,6 +13,10 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  ...compat.extends(
+    "plugin:tailwindcss/recommended",
+    "prettier"
+  ),
 ]);
 
 export default eslintConfig;
