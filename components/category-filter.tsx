@@ -8,14 +8,11 @@ type Props = {
 
 export default async function CategoryFilter(props: Props) {
   const { contents: categories } = await getCategories(); 
-  // console.log(categories)
   const currentCategoryId = props.currentCategoryId;
   const currentCategory = categories.find(
     (category) => category.id === currentCategoryId
   );
   
-  console.log(currentCategoryId)
-  console.log(currentCategory)
   return (
     <div className="mb-8">
       <h2 className="mb-4 text-xl font-semibold">
@@ -27,7 +24,7 @@ export default async function CategoryFilter(props: Props) {
           <Button
             variant={currentCategoryId === undefined ? "default" : "outline"}
           >
-            ALL
+            すべて
           </Button>
         </Link>
         {categories.map((category) => (

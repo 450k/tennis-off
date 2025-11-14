@@ -11,6 +11,7 @@ export default async function Home() {
     limit: LIMIT,
     offset: 0,
   });
+  
   const { contents: events } = await getEvents({
     limit: LIMIT,
     offset: 0,
