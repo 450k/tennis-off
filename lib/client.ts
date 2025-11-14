@@ -5,13 +5,13 @@ import {
   MicroCMSQueries,
 } from "microcms-js-sdk";
 
-if (!process.env.MICROCMS_SERVICE_DOMAIN) {
-  throw new Error("サービスドメインが必要です");
-}
+// if (!process.env.MICROCMS_SERVICE_DOMAIN) {
+//   throw new Error("サービスドメインが必要です");
+// }
 
-if (!process.env.MICROCMS_API_KEY) {
-  throw new Error("APIキーが必要です");
-}
+// if (!process.env.MICROCMS_API_KEY) {
+//   throw new Error("APIキーが必要です");
+// }
 
 const client = createClient({
   serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
